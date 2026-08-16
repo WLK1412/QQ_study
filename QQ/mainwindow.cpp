@@ -7,13 +7,17 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
      //创建一个CentralWidget, 并将其设置为MainWindow的中心部件
-    _login_dlg = new LoginDialog();
+    //加入了this指针后会使dialog窗口凸出来，目的是绑定到主窗口对象树，避免内存泄漏
+    _login_dlg = new LoginDialog(this);
     setCentralWidget(_login_dlg);
     _login_dlg->show();
 
     //创建和注册消息列表
     connect(_login_dlg,&LoginDialog::switchRegister,this,&MainWindow::slotSwitch);
-    _reg_dlg=new RegisterDialog();
+    _reg_dlg=new RegisterDialog(this);
+    //把dialog窗口嵌入到mainwindow窗口内
+    _login_dlg->setWindowFlags(Qt::CustomizeWindowHint|Qt::FramelessWindowHint);
+    _reg_dlg->setWindowFlags(Qt::CustomizeWindowHint|Qt::FramelessWindowHint);
 
 }
 
